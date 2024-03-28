@@ -25,7 +25,6 @@ async function findAll ( req, res )
   const keyword = req.query
   let query = {}
   if ( keyword ) query = keyword
-  console.log(req.query)
   try
   {
     const data = await CountryModel.find( query ).populate('categoryId')
