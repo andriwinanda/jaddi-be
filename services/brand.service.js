@@ -1,16 +1,15 @@
-const SeriesModel = require( '../models/series.model' )
+const BrandModel = require( '../models/brand.model' )
 
 
 async function create ( req, res )
 {
   try
   {
-    const { type, availability, doorLeaves } = req.body
-    const series = new SeriesModel( { type, availability, doorLeaves } )
-    const data = await series.save()
+    const { name, description, categoryId, countryId } = req.body
+    const brand = new BrandModel( { name, description, categoryId, countryId } )
+    await brand.save()
     return res.status( 200 ).json( {
-      message: 'Ok',
-      data
+      message: 'Ok'
     } )
   } catch ( error )
   {
@@ -22,12 +21,12 @@ async function create ( req, res )
 
 async function findAll ( req, res )
 {
-  const { keyword } = req.query
-  const query = {}
-  if ( keyword ) query.name = { "$regex": keyword, "$options": "i" }
+  const keyword = req.query
+  let query = {}
+  if ( keyword ) query = keyword
   try
   {
-    const data = await SeriesModel.find( query )
+    const data = await BrandModel.find( query ).populate('categoryId').populate('countryId')
     return res.status( 200 ).json( data )
   } catch ( error )
   {
@@ -41,8 +40,7 @@ async function findOne ( req, res )
   const id = req.params.id
   try
   {
-    const data = await SeriesModel.findById( id )
-
+    const data = await BrandModel.findById( id )
     if ( data )
     {
       return res.status( 200 ).json( data )
@@ -61,16 +59,14 @@ async function findOne ( req, res )
 
 async function update ( req, res )
 {
-  const { type, availability, doorLeaves } = req.body
-  let series = new SeriesModel( { type, availability, doorLeaves }, { _id : false })
+  const { name, description, categoryId, countryId } = req.body
+  const brand = new BrandModel( { name, description, categoryId, countryId }, { _id : false } )
   const { id } = req.params
   try
   {
-    console.log(series)
-    const data = await SeriesModel.findByIdAndUpdate( id, series )
+    await BrandModel.findByIdAndUpdate( id, brand )
     return res.status( 200 ).json( {
-      message: 'Ok',
-      data
+      message: 'Ok'
     } )
   } catch ( error )
   {
@@ -85,7 +81,7 @@ async function deleteOne ( req, res )
   const id = req.params.id
   try
   {
-    await SeriesModel.findByIdAndDelete( id )
+    await BrandModel.findByIdAndDelete( id )
     return res.status( 200 ).json( {
       message: 'Ok',
     } )

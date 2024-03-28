@@ -1,13 +1,13 @@
-const LocationModel = require( '../models/location.model' )
+const CountryModel = require( '../models/country.model' )
 
 
 async function create ( req, res )
 {
   try
   {
-    const { location, description, idMaterialPrice, idGlassPrice } = req.body
-    const locationItem = new LocationModel( { location, description, idMaterialPrice, idGlassPrice } )
-    const data = await locationItem.save()
+    const { name, description, categoryId } = req.body
+    const country = new CountryModel( { name, description, categoryId } )
+    const data = await country.save()
     return res.status( 200 ).json( {
       message: 'Ok',
       data
@@ -25,9 +25,10 @@ async function findAll ( req, res )
   const keyword = req.query
   let query = {}
   if ( keyword ) query = keyword
+  console.log(req.query)
   try
   {
-    const data = await LocationModel.find( query )
+    const data = await CountryModel.find( query ).populate('categoryId')
     return res.status( 200 ).json( data )
   } catch ( error )
   {
@@ -41,7 +42,7 @@ async function findOne ( req, res )
   const id = req.params.id
   try
   {
-    const data = await LocationModel.findById( id )
+    const data = await CountryModel.findById( id )
 
     if ( data )
     {
@@ -61,12 +62,12 @@ async function findOne ( req, res )
 
 async function update ( req, res )
 {
-  const { location, description, idMaterialPrice, idGlassPrice } = req.body
-  const locationItem = new LocationModel( { location, description, idMaterialPrice, idGlassPrice }, { _id : false } )
+  const { name, description, categoryId } = req.body
+  let country = new CountryModel( { name, description, categoryId }, { _id : false })
   const { id } = req.params
   try
   {
-    const data = await LocationModel.findByIdAndUpdate( id, locationItem )
+    const data = await CountryModel.findByIdAndUpdate( id, country )
     return res.status( 200 ).json( {
       message: 'Ok',
       data
@@ -84,7 +85,7 @@ async function deleteOne ( req, res )
   const id = req.params.id
   try
   {
-    await LocationModel.findByIdAndDelete( id )
+    await CountryModel.findByIdAndDelete( id )
     return res.status( 200 ).json( {
       message: 'Ok',
     } )

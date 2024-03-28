@@ -49,6 +49,7 @@ routes.use(
 routes.post( '/', upload.single( 'file' ), ( request, response ) =>
 {
   let image = request.files.file
+  const folder = request.query.folder
   const fileName = request.files.file.name
   if ( image )
   {
@@ -56,16 +57,16 @@ routes.post( '/', upload.single( 'file' ), ( request, response ) =>
     cloudinary.uploader.upload( image,
       {
         public_id: fileName.replace(/\.[^/.]+$/, ""),
-        folder: 'delica'
+        folder: folder
       },
       ( error, result ) =>
       {
         if ( error )
         {
-          return response.status( 500 )
+          return response.status( 400 )
             .json( {
               error: 'Failed to upload to the cloud',
-              details: error,
+              message: error.message,
             } )
         }
         return response.status( 200 )

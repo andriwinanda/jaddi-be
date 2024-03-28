@@ -5,8 +5,8 @@ async function create ( req, res )
 {
   try
   {
-    const { type, series, doorLeaves, description, fixGlassTop, fixGlassBottom, material, imageUrl } = req.body
-    const product = new ProductModel( { type, series, doorLeaves, description, fixGlassTop, fixGlassBottom, material, imageUrl } )
+    const { name, description, imageUrl, countryId, categoryId, brandId } = req.body
+    const product = new ProductModel( { name, description, imageUrl, countryId, categoryId, brandId } )
     const data = await product.save()
     return res.status( 200 ).json( {
       message: 'Ok',
@@ -22,13 +22,12 @@ async function create ( req, res )
 
 async function findAll ( req, res )
 {
-  const { keyword } = req.query
-  const query = {}
-  if ( keyword ) query.name = { "$regex": keyword, "$options": "i" }
+  const keyword = req.query
+  let query = {}
+  if ( keyword ) query = keyword
   try
   {
-    const data = await ProductModel.find( query )
-    data.map(el => el.imageUrl = process.env.ASSETS_URL + el.imageUrl )
+    const data = await ProductModel.find( query ).populate('categoryId').populate('countryId').populate('brandId')
     return res.status( 200 ).json( data )
   } catch ( error )
   {
@@ -43,7 +42,6 @@ async function findOne ( req, res )
   try
   {
     const data = await ProductModel.findById( id )
-    data.imageUrl = process.env.ASSETS_URL + data.imageUrl
     if ( data )
     {
       return res.status( 200 ).json( data )
@@ -62,9 +60,8 @@ async function findOne ( req, res )
 
 async function update ( req, res )
 {
-  const { type, series, doorLeaves, description, fixGlassTop, fixGlassBottom, material, imageUrl } = req.body
-  imageUrl.replace(process.env.ASSETS_URL, '')
-  const product = new ProductModel( { type, series, doorLeaves, description, fixGlassTop, fixGlassBottom, material, imageUrl }, { _id : false } )
+  const { name, description, imageUrl, countryId, categoryId, brandId } = req.body
+  const product = new ProductModel( { name, description, imageUrl, countryId, categoryId, brandId }, { _id : false } )
   const { id } = req.params
   try
   {

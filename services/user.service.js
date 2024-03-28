@@ -23,9 +23,9 @@ async function create ( req, res )
 
 async function findAll ( req, res )
 {
-  const { keyword } = req.query
-  const query = {}
-  if ( keyword ) query.name = { "$regex": keyword, "$options": "i" }
+  const keyword = req.query
+  let query = {}
+  if ( keyword ) query = keyword
   try
   {
     const data = await UserModel.find( query )

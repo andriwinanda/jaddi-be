@@ -1,13 +1,13 @@
-const LocationModel = require( '../models/location.model' )
+const NewsModel = require( '../models/news.model' )
 
 
 async function create ( req, res )
 {
   try
   {
-    const { location, description, idMaterialPrice, idGlassPrice } = req.body
-    const locationItem = new LocationModel( { location, description, idMaterialPrice, idGlassPrice } )
-    const data = await locationItem.save()
+    const { name, description, imageUrl} = req.body
+    const news = new NewsModel( { name, description, imageUrl} )
+    const data = await news.save()
     return res.status( 200 ).json( {
       message: 'Ok',
       data
@@ -27,7 +27,7 @@ async function findAll ( req, res )
   if ( keyword ) query = keyword
   try
   {
-    const data = await LocationModel.find( query )
+    const data = await NewsModel.find( query )
     return res.status( 200 ).json( data )
   } catch ( error )
   {
@@ -41,8 +41,7 @@ async function findOne ( req, res )
   const id = req.params.id
   try
   {
-    const data = await LocationModel.findById( id )
-
+    const data = await NewsModel.findById( id )
     if ( data )
     {
       return res.status( 200 ).json( data )
@@ -61,12 +60,12 @@ async function findOne ( req, res )
 
 async function update ( req, res )
 {
-  const { location, description, idMaterialPrice, idGlassPrice } = req.body
-  const locationItem = new LocationModel( { location, description, idMaterialPrice, idGlassPrice }, { _id : false } )
+  const { name, description, imageUrl} = req.body
+  const news = new NewsModel( { name, description, imageUrl}, { _id : false } )
   const { id } = req.params
   try
   {
-    const data = await LocationModel.findByIdAndUpdate( id, locationItem )
+    const data = await NewsModel.findByIdAndUpdate( id, news )
     return res.status( 200 ).json( {
       message: 'Ok',
       data
@@ -84,7 +83,7 @@ async function deleteOne ( req, res )
   const id = req.params.id
   try
   {
-    await LocationModel.findByIdAndDelete( id )
+    await NewsModel.findByIdAndDelete( id )
     return res.status( 200 ).json( {
       message: 'Ok',
     } )

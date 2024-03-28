@@ -1,13 +1,13 @@
-const LocationModel = require( '../models/location.model' )
+const CategoryyModel = require( '../models/category.model' )
 
 
 async function create ( req, res )
 {
   try
   {
-    const { location, description, idMaterialPrice, idGlassPrice } = req.body
-    const locationItem = new LocationModel( { location, description, idMaterialPrice, idGlassPrice } )
-    const data = await locationItem.save()
+    const { name, description } = req.body
+    const category = new CategoryyModel( { name, description } )
+    const data = await category.save()
     return res.status( 200 ).json( {
       message: 'Ok',
       data
@@ -27,7 +27,7 @@ async function findAll ( req, res )
   if ( keyword ) query = keyword
   try
   {
-    const data = await LocationModel.find( query )
+    const data = await CategoryyModel.find( query )
     return res.status( 200 ).json( data )
   } catch ( error )
   {
@@ -41,7 +41,7 @@ async function findOne ( req, res )
   const id = req.params.id
   try
   {
-    const data = await LocationModel.findById( id )
+    const data = await CategoryyModel.findById( id )
 
     if ( data )
     {
@@ -61,12 +61,12 @@ async function findOne ( req, res )
 
 async function update ( req, res )
 {
-  const { location, description, idMaterialPrice, idGlassPrice } = req.body
-  const locationItem = new LocationModel( { location, description, idMaterialPrice, idGlassPrice }, { _id : false } )
+  const { name, description } = req.body
+  let category = new CategoryyModel( { name, description }, { _id : false })
   const { id } = req.params
   try
   {
-    const data = await LocationModel.findByIdAndUpdate( id, locationItem )
+    const data = await CategoryyModel.findByIdAndUpdate( id, category )
     return res.status( 200 ).json( {
       message: 'Ok',
       data
@@ -84,7 +84,7 @@ async function deleteOne ( req, res )
   const id = req.params.id
   try
   {
-    await LocationModel.findByIdAndDelete( id )
+    await CategoryyModel.findByIdAndDelete( id )
     return res.status( 200 ).json( {
       message: 'Ok',
     } )

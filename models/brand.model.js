@@ -4,7 +4,16 @@ const { Schema } = mongoose
 const materialSchema = new Schema( {
   name: String,
   description: String,
-  price: Object
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category'
+  },
+  countryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Country'
+  },
+}, {
+  timestamps: true
 } )
 
 materialSchema.set( 'toJSON', {
@@ -12,10 +21,10 @@ materialSchema.set( 'toJSON', {
   versionKey: false,
   transform: function ( doc, ret, options )
   {
-    ret.idMaterial = ret._id
+    ret.idBrand = ret._id
     delete ret.id
     delete ret._id
     delete ret.__v
   }
 } )
-module.exports = mongoose.model( 'Material', materialSchema )
+module.exports = mongoose.model( 'Brand', materialSchema )
