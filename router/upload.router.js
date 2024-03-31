@@ -66,7 +66,7 @@ routes.post( '/', upload.single( 'file' ), ( request, response ) =>
           return response.status( 400 )
             .json( {
               error: 'Failed to upload to the cloud',
-              message: error.message,
+              message: error.message.includes('public_id') ? error.message.replace('public_id', 'file name') : error.message,
             } )
         }
         return response.status( 200 )
