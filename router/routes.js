@@ -39,7 +39,7 @@ router.use( '/product', ProductRouter )
 router.use( '/country', CountryRouter )
 router.use( '/category', CategoryRouter )
 router.use( '/user', authHandler.loginRequired, UserRouter )
-router.use( '/upload', authHandler.loginRequired, UploadRouter )
+router.use( '/upload', UploadRouter )
 router.use( '/oauth', Auth )
 
 module.exports = router

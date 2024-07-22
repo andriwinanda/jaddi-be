@@ -25,7 +25,9 @@ async function findAll(req, res) {
   let query = {}
   if (keyword) query = keyword
   try {
-    const data = await ProductModel.find(query).populate('categoryId').populate('countryId').populate('brandId')
+    console.log(query)
+    // const data = await ProductModel.find(query).populate('categoryId').populate('countryId').populate('brandId')
+    const data = await ProductModel.find(query)
     return res.status(200).json(data)
   } catch (error) {
     return res.status(500).json({
