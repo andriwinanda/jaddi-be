@@ -27,7 +27,7 @@ async function findAll ( req, res )
   if ( keyword ) query = keyword
   try
   {
-    const data = await NewsModel.find( query )
+    const data = await NewsModel.find( query ).sort({"createdAt": -1})
     return res.status( 200 ).json( data )
   } catch ( error )
   {
