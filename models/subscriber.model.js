@@ -13,10 +13,10 @@ subscriberSchema.set( 'toJSON', {
   versionKey: false,
   transform: function ( doc, ret, options )
   {
-    ret.idSubsciber = ret._id
+    ret.idSubscriber = ret._id
     delete ret.id
     delete ret._id
     delete ret.__v
   }
 } )
-module.exports = mongoose.model( 'Subsciber', subscriberSchema )
+module.exports = mongoose.model( 'Subscriber', subscriberSchema )
