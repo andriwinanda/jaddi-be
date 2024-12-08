@@ -1,22 +1,22 @@
 const mongoose = require( 'mongoose' )
 const { Schema } = mongoose
 
-const materialSchema = new Schema( {
+const subscriberSchema = new Schema( {
   email: String,
   notes: String,
 }, {
   timestamps: true
 } )
 
-materialSchema.set( 'toJSON', {
+subscriberSchema.set( 'toJSON', {
   virtuals: true,
   versionKey: false,
   transform: function ( doc, ret, options )
   {
-    ret.idBrand = ret._id
+    ret.idSubsciber = ret._id
     delete ret.id
     delete ret._id
     delete ret.__v
   }
 } )
-module.exports = mongoose.model( 'Brand', materialSchema )
+module.exports = mongoose.model( 'Subsciber', subscriberSchema )
