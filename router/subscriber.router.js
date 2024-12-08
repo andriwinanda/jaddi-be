@@ -1,6 +1,6 @@
 const express = require( 'express' )
 
-const {create, findAll, findOne, update, deleteOne} = require( '../services/brand.service' )
+const {create, findAll, findOne, update, deleteOne} = require( '../services/subscriber.service' )
 
 const routes = express.Router()
 routes.post( '/', create)
