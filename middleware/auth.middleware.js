@@ -1,27 +1,24 @@
-const jwt = require( "jsonwebtoken" )
-const config = require( "../auth.config.js" )
+const jwt = require("jsonwebtoken")
+const config = require("../auth.config.js")
 
 
-verifyToken = ( req, res, next ) =>
-{
-  let token = req.headers[ "x-access-token" ]
+verifyToken = (req, res, next) => {
+  let token = req.headers["x-access-token"]
 
-  if ( !token )
-  {
-    return res.status( 403 ).send( { message: "No token provided!" } )
+  if (!token) {
+    return res.status(403).send({ message: "Token is required" })
   }
 
-  jwt.verify( token,
+  jwt.verify(token,
     config.secret,
-    ( err, decoded ) =>
-    {
-      if ( err )
-      {
-        return res.status( 401 ).send( {
-          message: "Unauthorized!",
-        } )
+    (err, decoded) => {
+      if (err) {
+        if (err.name === 'TokenExpiredError') {
+          return res.status(401).json({ message: 'Token has expired' });
+        }
+        return res.status(403).json({ message: 'Invalid token' });
       }
-      req.userId = decoded.id
-      next()
-    } )
+      req.user = decoded;
+      next();
+    })
 }

@@ -55,7 +55,7 @@ exports.signin = (req, res) => {
       access_token: jwt.sign({ 
         email: user.email, 
         name: user.name,
-        id: user._id }, config.secret)
+        id: user._id }, config.secret, { expiresIn: '24h' })
     })
   })
 }
